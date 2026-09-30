@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Texel</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="menu-bar" aria-label="Application menu">
+        <div class="menu-wrap">
+          <button class="menu-btn" data-menu="fileMenu">File</button>
+          <div class="dropdown" id="fileMenu">
+            <button data-action="new">New</button>
+            <button data-action="open">Open</button>
+            <button data-action="save">Save</button>
+            <button data-action="print">Print</button>
+            <div class="separator"></div>
+            <button data-action="exit">Exit</button>
+          </div>
+        </div>
+
+        <div class="menu-wrap">
+          <button class="menu-btn" data-menu="editMenu">Edit</button>
+          <div class="dropdown" id="editMenu">
+            <button data-action="undo">Undo <span>Ctrl+Z</span></button>
+            <button data-action="redo">Redo <span>Ctrl+Y</span></button>
+            <button data-action="color">Color</button>
+            <button data-action="clear">Clear</button>
+          </div>
+        </div>
+
+        <div class="menu-wrap">
+          <button class="menu-btn" data-menu="viewMenu">View</button>
+          <div class="dropdown" id="viewMenu">
+            <button data-action="zoomIn">Zoom In</button>
+            <button data-action="zoomOut">Zoom Out</button>
+            <button data-action="liveSimulation">
+              Live Simulation <span id="liveStatus">On</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-wrap">
+          <button class="menu-btn" data-menu="helpMenu">Help</button>
+          <div class="dropdown dropdown-wide" id="helpMenu">
+            <button data-action="about">About</button>
+            <button data-action="tutorials">Tutorials</button>
+            <button data-action="account">My Account</button>
+            <button data-action="updates">Updates...</button>
+          </div>
+        </div>
+      </nav>
+      <div class="brand">© 2026 Texel - Designed by Sushmoy Saha Joy</div>
+    </header>
+
+    <div class="print-header">
+      <h1>Texel</h1>
+      <p id="printDesignName"></p>
+    </div>
+
+    <main class="app-shell">
+      <aside class="sidebar">
+        <h2>Control Panel</h2>
+        <input
+          id="designName"
+          class="design-name"
+          type="text"
+          placeholder="DESIGN NAME"
+          maxlength="60"
+        />
+
+        <section class="panel-card">
+          <h3>Grid Setup</h3>
+          <div class="two-col">
+            <label
+              >Warp Ends
+              <input id="warpEnds" type="number" min="2" max="24" value="8" />
+            </label>
+            <label
+              >Weft Picks
+              <input id="weftPicks" type="number" min="2" max="24" value="8" />
+            </label>
+          </div>
+          <button id="applyGrid" class="primary-btn">APPLY GRID</button>
+        </section>
+
+        <section class="panel-card">
+          <h3>Yarn Color</h3>
+          <div class="two-col color-row">
+            <label
+              >Warp Color
+              <input id="warpColor" type="color" value="#6f3de0" />
+            </label>
+            <label
+              >Weft Color
+              <input id="weftColor" type="color" value="#f7f7f7" />
+            </label>
+          </div>
+          <button id="applyColor" class="primary-btn">APPLY COLOR</button>
+        </section>
+
+        <section class="panel-card compact-card">
+          <h3>Weave Information</h3>
+          <div class="stats">
+            <span>Cells</span><strong id="cellCount">64</strong>
+            <span>Warp up</span><strong id="warpUpCount">0</strong>
+            <span>Repeat</span><strong id="repeatLabel">8 × 8</strong>
+          </div>
+        </section>
+
+        <section class="panel-card compact-card">
+          <h3>Default Weaves</h3>
+
+          <div class="preset-list">
+            <button class="weave-preset" data-preset="twill">
+              <span class="preset-name">Twill</span>
+              <span class="preset-size">2 × 2</span>
+            </button>
+
+            <button class="weave-preset" data-preset="brighton_honeycomb">
+              <span class="preset-name">Honeycomb</span>
+              <span class="preset-size">8 × 8</span>
+            </button>
+
+            <button class="weave-preset" data-preset="satin">
+              <span class="preset-name">Satin</span>
+              <span class="preset-size">8 × 8</span>
+            </button>
+
+            <button class="weave-preset" data-preset="diamond">
+              <span class="preset-name">Diamond</span>
+              <span class="preset-size">8 × 8</span>
+            </button>
+
+            <button class="weave-preset" data-preset="diaper">
+              <span class="preset-name">Diaper</span>
+              <span class="preset-size">8 × 8</span>
+            </button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="workspace-card pattern-card">
+        <div class="card-header">
+          <h1>DRAFTING, LIFTING, &amp; PATTERN GRID</h1>
+        </div>
+        <div class="pattern-inner">
+          <div class="pattern-layout">
+            <div class="draft-section">
+              <h2>DRAFTING PLAN</h2>
+              <div id="draftingPlan" class="draft-grid"></div>
+            </div>
+
+            <div class="lifting-title">LIFTING<br />PLAN</div>
+            <div id="colLabels" class="col-labels"></div>
+            <div id="rowLabels" class="row-labels"></div>
+            <div
+              id="patternGrid"
+              class="pattern-grid"
+              aria-label="Interactive weave pattern grid"
+            ></div>
+            <div id="liftingPlan" class="lifting-grid"></div>
+            <div id="bottomLabels" class="bottom-labels"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-card preview-card">
+        <div class="card-header preview-header">
+          <h1>LIVE FABRIC PREVIEW</h1>
+          <button
+            id="previewMenu"
+            class="ellipsis"
+            aria-label="Preview options"
+          >
+            •••
+          </button>
+        </div>
+        <div class="preview-inner">
+          <canvas id="fabricCanvas" width="640" height="640"></canvas>
+          <div class="zoom-row">
+            <span>Zoom</span>
+            <button class="icon-btn" id="zoomMinus" aria-label="Zoom out">
+              −
+            </button>
+            <input
+              id="zoomRange"
+              type="range"
+              min="1"
+              max="8"
+              step="1"
+              value="4"
+            />
+            <button class="icon-btn" id="zoomPlus" aria-label="Zoom in">
+              +
+            </button>
+          </div>
+          <button id="exportBtn" class="export-btn">
+            EXPORT PATTERN (PNG/PDF)
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <input
+      id="openFileInput"
+      type="file"
+      accept=".json,application/json"
+      hidden
+    />
+
+    <div id="modalBackdrop" class="modal-backdrop hidden">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="modal-head">
+          <h2 id="modalTitle">Texel</h2>
+          <button id="modalClose" class="modal-close">×</button>
+        </div>
+        <div id="modalBody" class="modal-body"></div>
+        <div id="modalActions" class="modal-actions"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
